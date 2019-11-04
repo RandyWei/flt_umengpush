@@ -1,6 +1,6 @@
 name: flt_umengpush_common
 description: A new Flutter plugin by umeng push common , 基于友盟推送common sdk封装的flutter插件
-version: 1.0.0
+version: 1.0.1
 author: Randy Wei<smile561607154@163.com>
 homepage: https://github.com/RandyWei/flt_umengpush_common
 repository: https://github.com/RandyWei/flt_umengpush_common
