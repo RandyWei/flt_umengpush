@@ -13,7 +13,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 
 class FltUmengpushCorePlugin(private val registrar: Registrar): MethodCallHandler {
 
-  private val eventSink = QueuingEventSink()
+  val eventSink = QueuingEventSink()
 
   companion object {
     @JvmStatic
