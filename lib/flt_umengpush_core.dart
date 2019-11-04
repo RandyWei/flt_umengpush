@@ -20,7 +20,7 @@ class FltUmengpushCore {
         var data = channelData["data"];
         notificationCallback(data);
       }
-    }, onError: () {});
+    }, onError: (Object obj) {});
 
     return await _channel.invokeMethod('register');
   }
