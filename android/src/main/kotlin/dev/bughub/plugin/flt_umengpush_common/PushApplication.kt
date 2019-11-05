@@ -2,6 +2,7 @@ package dev.bughub.plugin.flt_umengpush_common
 
 import io.flutter.app.FlutterApplication
 import android.content.pm.PackageManager
+import com.umeng.commonsdk.UMConfigure
 
 class PushApplication:FlutterApplication() {
     override fun onCreate() {
@@ -12,6 +13,8 @@ class PushApplication:FlutterApplication() {
         val channel = metaValue("UMENG_CHANNEL")
 
         FltUmengpushCommonPlugin.init(this,appKey,appSecret,channel)
+
+        UMConfigure.setLogEnabled(true)
     }
 
     private fun metaValue(metaKey: String): String {
