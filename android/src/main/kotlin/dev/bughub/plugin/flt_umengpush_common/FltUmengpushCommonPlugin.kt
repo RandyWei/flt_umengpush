@@ -1,6 +1,8 @@
 package dev.bughub.plugin.flt_umengpush_common
 
+import android.content.Context
 import android.text.TextUtils
+import android.util.Log
 import com.umeng.commonsdk.UMConfigure
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -14,6 +16,21 @@ class FltUmengpushCommonPlugin(var registrar: Registrar): MethodCallHandler {
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "plugin.bughub.dev/flt_umengpush_common")
       channel.setMethodCallHandler(FltUmengpushCommonPlugin(registrar))
+    }
+
+    @JvmStatic
+    fun init(context: Context, appKey:String, secret:String, channel:String="Umeng", deviceType:Int=UMConfigure.DEVICE_TYPE_PHONE){
+      if (TextUtils.isEmpty(secret)){
+        Log.e("UmengpushCommonPlugin","secret is null")
+        return
+      }
+
+      if (TextUtils.isEmpty(appKey)){
+        Log.e("UmengpushCommonPlugin","appKey is null")
+        return
+      }
+
+      UMConfigure.init(context, appKey, channel, deviceType, secret)
     }
   }
 
