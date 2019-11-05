@@ -1,4 +1,4 @@
-package com.chinahrt.flutter_plugin_demo
+package dev.bughub.plugin.flt_umengpush_core
 
 import io.flutter.plugin.common.EventChannel
 import java.util.ArrayList
