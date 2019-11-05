@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:flt_umengpush_core/flt_umengpush_core.dart';
 
 void main() => runApp(MyApp());
@@ -17,6 +14,11 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    FltUmengpushCore.listen(tokenCallback: (token) {
+      print("token:$token");
+    }, notificationCallback: (pushData) {
+      print("pushData:$pushData");
+    });
   }
 
   @override
