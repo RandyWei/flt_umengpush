@@ -1,5 +1,6 @@
 package dev.bughub.plugin.flt_umengpush_core
 
+import android.content.Context
 import android.util.Log
 import com.chinahrt.flutter_plugin_demo.QueuingEventSink
 import com.umeng.message.IUmengRegisterCallback
@@ -36,6 +37,34 @@ class FltUmengpushCorePlugin(private val registrar: Registrar): MethodCallHandle
         }
 
       })
+    }
+
+    @JvmStatic
+    fun register(context: Context){
+      //获取消息推送代理
+      val pushAgent = PushAgent.getInstance(context)
+      pushAgent.register(object : IUmengRegisterCallback{
+        override fun onSuccess(deviceToken: String?) {
+
+
+          Log.i("FltUmengpushCorePlugin","deviceToken:$deviceToken")
+
+        }
+
+        override fun onFailure(p0: String?, p1: String?) {
+
+          Log.i("FltUmengpushCorePlugin","onFailure:$p1  $p0")
+        }
+
+      })
+
+      //自定义通知栏打开动作
+      pushAgent.setNotificationClickHandler { _, uMessage ->
+
+        Log.i("FltUmengpushCorePlugin","uMessage:$uMessage")
+        Log.i("FltUmengpushCorePlugin","uMessage.custom:${uMessage.custom}")
+
+      }
     }
   }
 
