@@ -16,6 +16,7 @@ class FltUmengpushCorePlugin(private val registrar: Registrar): MethodCallHandle
 
   val eventSink = QueuingEventSink()
 
+
   companion object {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
@@ -39,63 +40,46 @@ class FltUmengpushCorePlugin(private val registrar: Registrar): MethodCallHandle
       })
     }
 
+    @JvmField
+    var pushAgent:PushAgent? = null
+
+    @JvmField
+    var deviceToken:String? = null
+
     @JvmStatic
     fun register(context: Context){
       //获取消息推送代理
       val pushAgent = PushAgent.getInstance(context)
+      FltUmengpushCorePlugin.pushAgent = pushAgent
       pushAgent.register(object : IUmengRegisterCallback{
         override fun onSuccess(deviceToken: String?) {
-
-
           Log.i("FltUmengpushCorePlugin","deviceToken:$deviceToken")
-
+          FltUmengpushCorePlugin.deviceToken = deviceToken
         }
 
         override fun onFailure(p0: String?, p1: String?) {
-
           Log.i("FltUmengpushCorePlugin","onFailure:$p1  $p0")
         }
 
       })
 
-      //自定义通知栏打开动作
-      pushAgent.setNotificationClickHandler { _, uMessage ->
-
-        Log.i("FltUmengpushCorePlugin","uMessage:$uMessage")
-        Log.i("FltUmengpushCorePlugin","uMessage.custom:${uMessage.custom}")
-
-      }
     }
   }
 
   
   override fun onMethodCall(call: MethodCall, result: Result) {
-    if (call.method == "register") {
+    if (call.method == "configure") {
 
-      //获取消息推送代理
-      val pushAgent = PushAgent.getInstance(registrar.context())
-      pushAgent.register(object : IUmengRegisterCallback{
-        override fun onSuccess(deviceToken: String?) {
+      deviceToken?.let {
+        val eventResult = HashMap<String, Any>()
+        eventResult["event"] = "configure"
+        eventResult["deviceToken"] = it
 
-
-          Log.i("FltUmengpushCorePlugin","deviceToken:$deviceToken")
-
-          val eventResult = HashMap<String, Any>()
-          eventResult["event"] = "register"
-          eventResult["deviceToken"] = deviceToken ?: ""
-
-          eventSink.success(eventResult)
-        }
-
-        override fun onFailure(p0: String?, p1: String?) {
-
-          eventSink.error("error","$p0 $p1",p1?:"")
-        }
-
-      })
+        eventSink.success(eventResult)
+      }
 
       //自定义通知栏打开动作
-      pushAgent.setNotificationClickHandler { _, uMessage ->
+      pushAgent?.setNotificationClickHandler { _, uMessage ->
 
         Log.i("FltUmengpushCorePlugin","uMessage:$uMessage")
         Log.i("FltUmengpushCorePlugin","uMessage.custom:${uMessage.custom}")

@@ -9,11 +9,11 @@ class FltUmengpushCore {
   /*
   * 注册推送服务
   * */
-  static Future<Void> register(Function registerCallback, Function notificationCallback) async {
+  static Future<Void> configure(Function registerCallback, Function notificationCallback) async {
     EventChannel eventChannel = const EventChannel("plugin.bughub.dev/flt_umengpush_core/event");
     eventChannel.receiveBroadcastStream().listen((channelData) {
       var event = channelData["event"];
-      if (event == "register") {
+      if (event == "configure") {
         var deviceToken = channelData["deviceToken"];
         registerCallback(deviceToken);
       } else if (event == "notificationHandler") {
@@ -24,6 +24,6 @@ class FltUmengpushCore {
       print(obj);
     });
 
-    return await _channel.invokeMethod('register');
+    return await _channel.invokeMethod('configure');
   }
 }
