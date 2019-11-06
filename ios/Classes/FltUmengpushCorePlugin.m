@@ -20,6 +20,8 @@
     [eventChannel setStreamHandler:instance];
     
     [registrar addApplicationDelegate:instance];
+    
+    NSLog(@"registerWithRegistrar");
 }
 
 
@@ -44,7 +46,7 @@
 
 #pragma ApplicationDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
-    NSLog(@"didFinishLaunchingWithOptions");
+    
         UMessageRegisterEntity *entity = [[UMessageRegisterEntity alloc]init];
         if (@available(iOS 10.0, *)) {
             [UNUserNotificationCenter currentNotificationCenter].delegate = self;
@@ -61,9 +63,12 @@
 #pragma UNUserNotificationCenterDelegate
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
-    eventSink(@{@"event":@"configure",
-    @"deviceToken":[self stringDevicetoken:deviceToken]
-    });
+    
+    [self stringDevicetoken:deviceToken]
+    
+//    eventSink(@{@"event":@"configure",
+//    @"deviceToken":[self stringDevicetoken:deviceToken]
+//    });
 }
 
 //iOS10以下使用这两个方法接收通知
@@ -123,6 +128,7 @@
 }
 
 - (FlutterError *)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)events{
+    NSLog(@"onListenWithArguments");
     eventSink = events;
     return nil;
 }
