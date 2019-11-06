@@ -44,7 +44,7 @@
 
 #pragma ApplicationDelegate
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
-    
+    NSLog(@"didFinishLaunchingWithOptions");
         UMessageRegisterEntity *entity = [[UMessageRegisterEntity alloc]init];
         if (@available(iOS 10.0, *)) {
             [UNUserNotificationCenter currentNotificationCenter].delegate = self;
@@ -52,7 +52,7 @@
             // Fallback on earlier versions
         }
         [UMessage registerForRemoteNotificationsWithLaunchOptions:launchOptions Entity:entity completionHandler:^(BOOL granted, NSError * _Nullable error) {
-    
+            NSLog(@"didReceiveRemoteNotification:%d %@",granted,error);
         }];
     
     return YES;
