@@ -9,17 +9,34 @@
 //pub
 dependencies:
   flt_umengpush_common: ^lastest_version
+  flt_umengpush_core: ^lastest_version
 
 //import
 dependencies:
   flt_umengpush_common:
     git:
       url: git://github.com/RandyWei/flt_umengpush_common.git
+  flt_umengpush_core:
+    git:
+      url: git://github.com/RandyWei/flt_umengpush_core.git
 ```
 
 ### Android
 
-#### 权限
+创建App类继承io.flutter.app.FlutterApplication
+```
+class App: FlutterApplication() {
+    override fun onCreate() {
+        super.onCreate()
+
+        val appKey = "友盟AppKey"
+        val secret = "友盟secret"
+        FltUmengpushCommonPlugin.init(this,appKey,secret)
+        FltUmengpushCorePlugin.register(this)
+    }
+}
+```
+然后在AndroidManifest.xml中使用该类,并配置权限
 
 ```xml
 <manifest
@@ -39,76 +56,78 @@ dependencies:
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <application>
+    <application android:name=".App">
         ...
     </application>
 </manifest>
-```
-
-### 方法
 
 ```
-/**
-* 设置组件化的Log开关
-* 参数: boolean 默认为false，如需查看LOG设置为true
-*/
-FltUmengpushCommon.setLogEnabled(true);
+### iOS
 
 
-/**
-* 初始化common库
-* 参数1:【友盟+】 appKey
-* 参数2:Push推送业务的secret
-* 参数4:【友盟+】 channel
-* 参数3:设备类型，FltUmengpushCommon.DEVICE_TYPE_PHONE为手机、FltUmengpushCommon.DEVICE_TYPE_BOX为盒子，默认为手机
-*/
-FltUmengpushCommon.init(appKey, secret, channel, deviceType);
+
+#### swift
+
+在 项目名-Bridgin-Header.h中导包
+```
+#import "FltUmengpushCommonPlugin.h"
 ```
 
-### Example
-```dart
-import 'package:flt_video_player/flt_video_player.dart';
-import 'package:flutter/material.dart';
+在ApppDelegate中添加以下代码
+```
+@objc class AppDelegate: FlutterAppDelegate {
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+    GeneratedPluginRegistrant.register(with: self)
+    
+    //初始化友盟推送
+    FltUmengpushCommonPlugin.initWithAppKey("友盟推送AppKey", channel: "渠道")
+    
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+}
+```
 
-void main() => runApp(MyApp());
+#### oc
+```
+#include "AppDelegate.h"
+#include "GeneratedPluginRegistrant.h"
+#include <FltUmengpushCommonPlugin.h>
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
+@implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)application
+    didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  [GeneratedPluginRegistrant registerWithRegistry:self];
+  // Override point for customization after application launch.
+    //初始化友盟推送
+    [FltUmengpushCommonPlugin initWithAppKey:@"友盟推送appKey" channel:@"渠道"];
+    
+  return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
-class _MyAppState extends State<MyApp> {
-  VideoPlayerController _controller;
+@end
+```
 
+### dart代码
+
+在程序入口监听通知
+```dart
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.path(
-        "https://github.com/RandyWei/flt_video_player/blob/master/example/SampleVideo_1280x720_30mb.mp4?raw=true")
-      ..initialize();
+      FltUmengpushCore.listen(tokenCallback: (token) {
+          //注册成功token回调
+          print("deviceToken:$token");
+        }, notificationCallback: (pushData) {
+          //点击通知回调，pushData为自定义数据，按需进行添加逻辑代码
+          print("data:$pushData");
+        });
+      }
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Simple Demo",
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Simple Demo"),
-        ),
-        body: AspectRatio(
-          aspectRatio: 1.8,
-          child: VideoPlayer(_controller),
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller?.dispose();
-  }
-}
-
 ```
+
+
+
