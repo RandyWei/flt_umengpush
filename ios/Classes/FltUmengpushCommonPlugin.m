@@ -11,6 +11,20 @@
   [registrar addMethodCallDelegate:instance channel:channel];
 }
 
++ (void)initWithAppKey:(NSString *)appKey channel:(NSString *)channel{
+    if (appKey==nil||[appKey isEqual:[NSNull null]]||[appKey isEqualToString:@""]) {
+        NSLog(@"FltUmengpushCommonPlugin:appKey is null");
+        return;
+    }
+    
+    if (channel==nil||[channel isEqual:[NSNull null]]||[channel isEqualToString:@""]) {
+        NSLog(@"FltUmengpushCommonPlugin:channel is null");
+        return;
+    }
+    
+    [UMConfigure initWithAppkey:appKey channel:channel];
+}
+
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   if ([@"init" isEqualToString:call.method]) {
     
