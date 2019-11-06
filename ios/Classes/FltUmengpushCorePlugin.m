@@ -65,10 +65,12 @@
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
     
     [self stringDevicetoken:deviceToken];
-    
-//    eventSink(@{@"event":@"configure",
-//    @"deviceToken":[self stringDevicetoken:deviceToken]
-//    });
+    if (eventSink!=nil) {
+        eventSink(@{
+            @"event":@"configure",
+            @"deviceToken":[self stringDevicetoken:deviceToken]
+        });
+    }
 }
 
 //iOS10以下使用这两个方法接收通知
