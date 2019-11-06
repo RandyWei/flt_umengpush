@@ -7,6 +7,7 @@
 
 @implementation FltUmengpushCorePlugin {
     FlutterEventSink eventSink;
+    NSDictionary* lastUserInfo;//最后一次推送内容
 }
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
@@ -41,6 +42,14 @@
     NSString *pushToken = [[[token stringByReplacingOccurrencesOfString:@"<" withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
 //    NSLog(@"umeng_push_plugin token: %@", pushToken);
     return pushToken;
+}
+
+-(void)sendMessage:(NSDictionary*)userInfo{
+    eventSink(@{
+        @"event":@"notificationHandler",
+        @"data":userInfo
+    });
+    lastUserInfo = nil;
 }
 
 #pragma ApplicationDelegate
@@ -78,10 +87,7 @@
 //    NSLog(@"didReceiveRemoteNotification:%@",userInfo);
     
     if (eventSink!=nil) {
-        eventSink(@{
-            @"event":@"notificationHandler",
-            @"data":userInfo
-        });
+        [self sendMessage:userInfo];
     }
     
     [UMessage setAutoAlert:NO];
@@ -119,10 +125,9 @@
 //    NSLog(@"didReceiveNotificationResponse:%@",userInfo);
     
     if (eventSink!=nil) {
-        eventSink(@{
-            @"event":@"notificationHandler",
-            @"data":userInfo
-        });
+        [self sendMessage:userInfo];
+    } else { //当应用被杀掉，点击通知从后台启动时，此时eventSink未初始化完成为nil,先把通知信息保存下来
+        lastUserInfo = userInfo;
     }
     
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
@@ -144,6 +149,10 @@
 
 - (FlutterError *)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)events{
     eventSink = events;
+    //如果应用被杀掉收到推送，点击通知从后台启动时，此时eventSink初始化完成,把保存下来的通知信息通知Flutter
+    if (lastUserInfo!=nil) {
+        [self sendMessage:lastUserInfo];
+    }
     return nil;
 }
 
