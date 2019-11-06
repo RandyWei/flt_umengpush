@@ -76,7 +76,14 @@
 //iOS10以下使用这两个方法接收通知
 - (BOOL)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler{
     
-    NSLog(@"didReceiveRemoteNotification:%@",userInfo);
+//    NSLog(@"didReceiveRemoteNotification:%@",userInfo);
+    
+    if (eventSink!=nil) {
+        eventSink(@{
+            @"event":@"notificationHandler",
+            @"data":userInfo
+        });
+    }
     
     [UMessage setAutoAlert:NO];
     if ([[[UIDevice currentDevice] systemVersion]intValue] < 10) {
@@ -93,7 +100,7 @@
     
     NSDictionary *userInfo = notification.request.content.userInfo;
     
-    NSLog(@"willPresentNotification:%@",userInfo);
+//    NSLog(@"willPresentNotification:%@",userInfo);
     
     if ([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         [UMessage setAutoAlert:NO];
@@ -110,7 +117,14 @@
     
     NSDictionary * userInfo = response.notification.request.content.userInfo;
     
-    NSLog(@"didReceiveNotificationResponse:%@",userInfo);
+//    NSLog(@"didReceiveNotificationResponse:%@",userInfo);
+    
+    if (eventSink!=nil) {
+        eventSink(@{
+            @"event":@"notificationHandler",
+            @"data":userInfo
+        });
+    }
     
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         //应用处于后台时的远程推送接受
