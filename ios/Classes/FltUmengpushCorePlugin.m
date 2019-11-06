@@ -21,7 +21,6 @@
     
     [registrar addApplicationDelegate:instance];
     
-    NSLog(@"registerWithRegistrar");
 }
 
 
@@ -40,7 +39,7 @@
 - (NSString *)stringDevicetoken:(NSData *)deviceToken {
     NSString *token = [deviceToken description];
     NSString *pushToken = [[[token stringByReplacingOccurrencesOfString:@"<" withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
-    NSLog(@"umeng_push_plugin token: %@", pushToken);
+//    NSLog(@"umeng_push_plugin token: %@", pushToken);
     return pushToken;
 }
 
@@ -54,7 +53,7 @@
             // Fallback on earlier versions
         }
         [UMessage registerForRemoteNotificationsWithLaunchOptions:launchOptions Entity:entity completionHandler:^(BOOL granted, NSError * _Nullable error) {
-            NSLog(@"didReceiveRemoteNotification:%d %@",granted,error);
+//            NSLog(@"didReceiveRemoteNotification:%d %@",granted,error);
         }];
     
     return YES;
@@ -144,7 +143,6 @@
 }
 
 - (FlutterError *)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)events{
-    NSLog(@"onListenWithArguments");
     eventSink = events;
     return nil;
 }
