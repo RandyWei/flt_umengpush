@@ -27,7 +27,7 @@
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
   if ([@"configure" isEqualToString:call.method]) {
       
-      
+      [[UIApplication sharedApplication] registerForRemoteNotifications];
       
     result(nil);
   } else {
