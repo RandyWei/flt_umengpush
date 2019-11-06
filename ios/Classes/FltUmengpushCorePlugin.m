@@ -64,7 +64,7 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
     
-    [self stringDevicetoken:deviceToken]
+    [self stringDevicetoken:deviceToken];
     
 //    eventSink(@{@"event":@"configure",
 //    @"deviceToken":[self stringDevicetoken:deviceToken]
