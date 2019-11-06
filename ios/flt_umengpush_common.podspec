@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flt_umengpush_common'
-  s.version          = '1.0.0'
+  s.version          = '1.0.2'
   s.summary          = 'A new Flutter plugin by umeng push common'
   s.description      = <<-DESC
 A new Flutter plugin by umeng push common
