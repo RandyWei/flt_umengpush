@@ -15,9 +15,14 @@ class FltUmengpushCommon {
   /*
    * 初始化方法
    */
-  static Future<Void> init(String appKey, String secret, [String channel, int deviceType]) async {
-    return await _channel.invokeMethod(
-        'init', {"appKey": appKey, "secret": secret, "channel": channel, "deviceType": deviceType});
+  static Future<Void> init(String appKey, String secret,
+      [String channel, int deviceType]) async {
+    return await _channel.invokeMethod('init', {
+      "appKey": appKey,
+      "secret": secret,
+      "channel": channel,
+      "deviceType": deviceType
+    });
   }
 
   /*
