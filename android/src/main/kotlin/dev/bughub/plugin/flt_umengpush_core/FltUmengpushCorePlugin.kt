@@ -1,8 +1,11 @@
 package dev.bughub.plugin.flt_umengpush_core
 
 import android.content.Context
+import android.util.Log
 import com.umeng.message.IUmengRegisterCallback
 import com.umeng.message.PushAgent
+import com.umeng.message.common.inter.ITagManager
+import com.umeng.message.tag.TagManager
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -68,33 +71,63 @@ class FltUmengpushCorePlugin() : MethodCallHandler {
 
 
     override fun onMethodCall(call: MethodCall, result: Result) {
-        if (call.method == "configure") {
+        when {
+            call.method == "configure" -> {
 
-            if (pushAgent==null||deviceToken==null){
-                eventSink.error("error","配置可能有错，请检查.","")
+                if (pushAgent==null||deviceToken==null){
+                    eventSink.error("error","配置可能有错，请检查.","")
+                }
+
+                deviceToken?.let {
+                    val eventResult = HashMap<String, Any>()
+                    eventResult["event"] = "configure"
+                    eventResult["deviceToken"] = it
+
+                    eventSink.success(eventResult)
+                }
+
+                //自定义通知栏打开动作
+                pushAgent?.setNotificationClickHandler { _, uMessage ->
+
+                    val eventResult = HashMap<String, Any>()
+                    eventResult["event"] = "notificationHandler"
+                    eventResult["data"] = uMessage.custom
+
+                    eventSink.success(eventResult)
+                }
+
+                result.success(null)
             }
-
-            deviceToken?.let {
-                val eventResult = HashMap<String, Any>()
-                eventResult["event"] = "configure"
-                eventResult["deviceToken"] = it
-
-                eventSink.success(eventResult)
+            //添加标签 示例：将“标签1”、“标签2”绑定至该设备
+            call.method == "addTags" -> {
+                val  tags = call.argument<List<String>>("tags")
+                Log.i("======","$tags")
+//                pushAgent?.tagManager?.addTags(TagManager.TCallBack { isSuccess, result ->
+//
+//                })
+                result.success(null)
             }
+            call.method == "deleteTags" -> {
 
-            //自定义通知栏打开动作
-            pushAgent?.setNotificationClickHandler { _, uMessage ->
-
-                val eventResult = HashMap<String, Any>()
-                eventResult["event"] = "notificationHandler"
-                eventResult["data"] = uMessage.custom
-
-                eventSink.success(eventResult)
+                pushAgent.toString()
+                result.success(null)
             }
+            call.method == "addAlias" -> {
 
-            result.success(null)
-        } else {
-            result.notImplemented()
+                pushAgent.toString()
+                result.success(null)
+            }
+            call.method == "setAlias" -> {
+
+                pushAgent.toString()
+                result.success(null)
+            }
+            call.method == "deleteAlias" -> {
+
+                pushAgent.toString()
+                result.success(null)
+            }
+            else -> result.notImplemented()
         }
     }
 }

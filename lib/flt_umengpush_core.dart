@@ -7,17 +7,14 @@ typedef TokenCallBack(String token);
 typedef NotificationCallback(dynamic pushData);
 
 class FltUmengpushCore {
-  static const MethodChannel _channel =
-      const MethodChannel('plugin.bughub.dev/flt_umengpush_core');
+  static const MethodChannel _channel = const MethodChannel('plugin.bughub.dev/flt_umengpush_core');
 
   /*
   * 监听通知
   * */
   static Future<Void> listen(
-      {TokenCallBack tokenCallback,
-      NotificationCallback notificationCallback}) async {
-    EventChannel eventChannel =
-        const EventChannel("plugin.bughub.dev/flt_umengpush_core/event");
+      {TokenCallBack tokenCallback, NotificationCallback notificationCallback}) async {
+    EventChannel eventChannel = const EventChannel("plugin.bughub.dev/flt_umengpush_core/event");
     eventChannel.receiveBroadcastStream().listen((channelData) {
       var event = channelData["event"];
       if (event == "configure") {
@@ -32,5 +29,9 @@ class FltUmengpushCore {
     });
 
     return await _channel.invokeMethod('configure');
+  }
+
+  static Future<Void> addTags(List<String> args) async {
+    return await _channel.invokeMethod("addTags", {"tags": args});
   }
 }
