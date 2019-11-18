@@ -100,11 +100,14 @@ class FltUmengpushCorePlugin() : MethodCallHandler {
             }
             //添加标签 示例：将“标签1”、“标签2”绑定至该设备
             call.method == "addTags" -> {
-                val  tags = call.argument<List<String>>("tags")
-                Log.i("======","$tags")
+
+                val  tags = call.argument<List<String>>("tags") ?: arrayListOf()
+                Log.i("====","${tags.toTypedArray()}")
+
 //                pushAgent?.tagManager?.addTags(TagManager.TCallBack { isSuccess, result ->
 //
-//                })
+//                }, *tags.toTypedArray())
+
                 result.success(null)
             }
             call.method == "deleteTags" -> {
