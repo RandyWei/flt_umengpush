@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.umeng.message.IUmengRegisterCallback
 import com.umeng.message.PushAgent
+import com.umeng.message.UTrack
 import com.umeng.message.common.inter.ITagManager
 import com.umeng.message.tag.TagManager
 import io.flutter.plugin.common.EventChannel
@@ -13,7 +14,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-class FltUmengpushCorePlugin() : MethodCallHandler {
+class FltUmengpushCorePlugin(var registrar: Registrar) : MethodCallHandler {
 
     val eventSink = QueuingEventSink()
 
@@ -22,11 +23,10 @@ class FltUmengpushCorePlugin() : MethodCallHandler {
         @JvmStatic
         fun registerWith(registrar: Registrar) {
 
-            val plugin = FltUmengpushCorePlugin()
+            val plugin = FltUmengpushCorePlugin(registrar)
 
             val channel = MethodChannel(registrar.messenger(), "plugin.bughub.dev/flt_umengpush_core")
             channel.setMethodCallHandler(plugin)
-
             val eventChannel = EventChannel(registrar.messenger(), "plugin.bughub.dev/flt_umengpush_core/event")
             eventChannel.setStreamHandler(object : EventChannel.StreamHandler {
                 override fun onListen(p0: Any?, sink: EventChannel.EventSink?) {
@@ -102,32 +102,77 @@ class FltUmengpushCorePlugin() : MethodCallHandler {
             call.method == "addTags" -> {
 
                 val  tags = call.argument<List<String>>("tags") ?: arrayListOf()
-                Log.i("====","${tags.toTypedArray()}")
 
-//                pushAgent?.tagManager?.addTags(TagManager.TCallBack { isSuccess, result ->
-//
-//                }, *tags.toTypedArray())
+
+
+                pushAgent?.tagManager?.addTags(TagManager.TCallBack { isSuccess, result ->
+
+                }, *tags.toTypedArray())
 
                 result.success(null)
             }
+            //删除标签,将之前添加的标签中的一个或多个删除
             call.method == "deleteTags" -> {
 
-                pushAgent.toString()
+                val  tags = call.argument<List<String>>("tags") ?: arrayListOf()
+
+                pushAgent?.tagManager?.deleteTags(TagManager.TCallBack { isSuccess, result ->
+
+                }, *tags.toTypedArray())
+
                 result.success(null)
             }
+            //别名增加，将某一类型的别名ID绑定至某设备，老的绑定设备信息还在，别名ID和device_token是一对多的映射关系
             call.method == "addAlias" -> {
 
-                pushAgent.toString()
+                val  alias = call.argument<String>("alias")
+                val type = call.argument<String>("type")
+
+                pushAgent?.addAlias(alias,type) { isSuccess, message ->
+                    try{
+                        val eventResult = HashMap<String, Any>()
+                        eventResult["isSuccess"] = isSuccess
+                        eventResult["message"] = message
+                        registrar.activity().runOnUiThread { MethodChannel(registrar.messenger(),"plugin.bughub.dev/flt_umengpush_core/UTrack.ICallBack_addAlias").invokeMethod("callback",eventResult)}
+                    }catch (e:Exception){}
+                }
+
                 result.success(null)
             }
+            //别名绑定，将某一类型的别名ID绑定至某设备，老的绑定设备信息被覆盖，别名ID和deviceToken是一对一的映射关系
             call.method == "setAlias" -> {
 
-                pushAgent.toString()
+                val  alias = call.argument<String>("alias")
+                val type = call.argument<String>("type")
+
+                pushAgent?.setAlias(alias,type) { isSuccess, message ->
+                    try {
+                        val eventResult = HashMap<String, Any>()
+                        eventResult["isSuccess"] = isSuccess
+                        eventResult["message"] = message
+                        registrar.activity().runOnUiThread { MethodChannel(registrar.messenger(),"plugin.bughub.dev/flt_umengpush_core/UTrack.ICallBack_setAlias").invokeMethod("callback",eventResult) }
+                    }catch (e:Exception){
+                        Log.i("----",e.message)
+                    }
+                }
                 result.success(null)
             }
+            //移除别名ID
             call.method == "deleteAlias" -> {
 
-                pushAgent.toString()
+                val  alias = call.argument<String>("alias")
+                val type = call.argument<String>("type")
+
+                pushAgent?.deleteAlias(alias,type) { isSuccess, message ->
+                    try{
+                    val eventResult = HashMap<String, Any>()
+                    eventResult["isSuccess"] = isSuccess
+                    eventResult["message"] = message
+                    registrar.activity().runOnUiThread { MethodChannel(registrar.messenger(),"plugin.bughub.dev/flt_umengpush_core/UTrack.ICallBack_deleteAlias").invokeMethod("callback",eventResult) }
+                    }catch (e:Exception){
+                        Log.i("----",e.message)
+                    }
+                }
                 result.success(null)
             }
             else -> result.notImplemented()
