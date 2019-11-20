@@ -2,7 +2,7 @@
 #import <UMPush/UMessage.h>
 
 @interface FltUmengpushCorePlugin () <UNUserNotificationCenterDelegate>
-
+@property(readonly,nonatomic) NSObject<FlutterPluginRegistrar>* registrar;
 @end
 
 @implementation FltUmengpushCorePlugin {
@@ -10,11 +10,19 @@
     NSDictionary* lastUserInfo;//最后一次推送内容
 }
 
+-(instancetype)initWithRegistrar:(NSObject<FlutterPluginRegistrar>*) registrar{
+    self = [super init];
+    
+    _registrar = registrar;
+    
+    return self;
+}
+
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
   FlutterMethodChannel* channel = [FlutterMethodChannel
       methodChannelWithName:@"plugin.bughub.dev/flt_umengpush_core"
             binaryMessenger:[registrar messenger]];
-  FltUmengpushCorePlugin* instance = [[FltUmengpushCorePlugin alloc] init];
+  FltUmengpushCorePlugin* instance = [[FltUmengpushCorePlugin alloc] initWithRegistrar:registrar];
   [registrar addMethodCallDelegate:instance channel:channel];
     
     FlutterEventChannel *eventChannel = [FlutterEventChannel eventChannelWithName:@"plugin.bughub.dev/flt_umengpush_core/event" binaryMessenger:[registrar messenger]];
@@ -32,8 +40,115 @@
       [[UIApplication sharedApplication] registerForRemoteNotifications];
       
     result(nil);
+  }else if ([@"addTags" isEqualToString:call.method]) {//添加标签 示例：将“标签1”、“标签2”绑定至该设备
+      
+      NSDictionary *argsDict = call.arguments;
+      
+      NSArray *tags = argsDict[@"tags"];
+      
+      [UMessage addTags:tags response:^(id  _Nullable responseObject, NSInteger remain, NSError * _Nullable error) {
+          
+      }];
+      
+      result(nil);
+  }else if ([@"deleteTags" isEqualToString:call.method]) {//删除标签,将之前添加的标签中的一个或多个删除
+      
+      NSDictionary *argsDict = call.arguments;
+      
+      NSArray *tags = argsDict[@"tags"];
+      
+      [UMessage deleteTags:tags response:^(id  _Nullable responseObject, NSInteger remain, NSError * _Nullable error) {
+          
+      }];
+      
+      result(nil);
+  }else if ([@"addAlias" isEqualToString:call.method]) {//别名增加，将某一类型的别名ID绑定至某设备，老的绑定设备信息还在，别名ID和device_token是一对多的映射关系
+      
+      NSDictionary *argsDict = call.arguments;
+      
+      NSString *alias = argsDict[@"alias"];
+      
+      NSString *type = argsDict[@"type"];
+      
+      [UMessage addAlias:alias type:type response:^(id  _Nullable responseObject, NSError * _Nullable error) {
+          FlutterMethodChannel* channel = [FlutterMethodChannel
+          methodChannelWithName:@"plugin.bughub.dev/flt_umengpush_core/UTrack.ICallBack_addAlias"
+                binaryMessenger:[self.registrar messenger]];
+          BOOL isSuccess = NO;
+          NSString *message = @"";
+          
+          if (error==nil) {
+              isSuccess = YES;
+              message = responseObject;
+          } else {
+              isSuccess = NO;
+              message = error.localizedDescription;
+          }
+          
+          NSDictionary *resultDict = @{@"isSuccess": @(isSuccess),@"message":message};
+          [channel invokeMethod:@"callback" arguments: resultDict];
+      }];
+      
+      result(nil);
+  }else if ([@"setAlias" isEqualToString:call.method]) {//别名绑定，将某一类型的别名ID绑定至某设备，老的绑定设备信息被覆盖，别名ID和deviceToken是一对一的映射关系
+      
+      NSDictionary *argsDict = call.arguments;
+      
+      NSString *alias = argsDict[@"alias"];
+      
+      NSString *type = argsDict[@"type"];
+      
+      [UMessage setAlias:alias type:type response:^(id  _Nullable responseObject, NSError * _Nullable error) {
+          FlutterMethodChannel* channel = [FlutterMethodChannel
+          methodChannelWithName:@"plugin.bughub.dev/flt_umengpush_core/UTrack.ICallBack_setAlias"
+                binaryMessenger:[self.registrar messenger]];
+          BOOL isSuccess = NO;
+          NSString *message = @"";
+          
+          if (error==nil) {
+              isSuccess = YES;
+              message = responseObject;
+          } else {
+              isSuccess = NO;
+              message = error.localizedDescription;
+          }
+          
+          NSDictionary *resultDict = @{@"isSuccess": @(isSuccess),@"message":message};
+          [channel invokeMethod:@"callback" arguments: resultDict];
+      }];
+      
+      result(nil);
+  }else if ([@"deleteAlias" isEqualToString:call.method]) {//移除别名ID
+      
+      NSDictionary *argsDict = call.arguments;
+      
+      NSString *alias = argsDict[@"alias"];
+      
+      NSString *type = argsDict[@"type"];
+      
+      [UMessage removeAlias:alias type:type response:^(id  _Nullable responseObject, NSError * _Nullable error) {
+          
+          FlutterMethodChannel* channel = [FlutterMethodChannel
+          methodChannelWithName:@"plugin.bughub.dev/flt_umengpush_core/UTrack.ICallBack_deleteAlias"
+                binaryMessenger:[self.registrar messenger]];
+          BOOL isSuccess = NO;
+          NSString *message = @"";
+
+          if (error==nil) {
+              isSuccess = YES;
+              message = responseObject;
+          } else {
+              isSuccess = NO;
+              message = error.localizedDescription;
+          }
+
+          NSDictionary *resultDict = @{@"isSuccess": @(isSuccess),@"message":message};
+          [channel invokeMethod:@"callback" arguments: resultDict];
+      }];
+      
+      result(nil);
   } else {
-    result(FlutterMethodNotImplemented);
+      result(FlutterMethodNotImplemented);
   }
 }
 
