@@ -8,6 +8,7 @@
 //pub
 dependencies:
   flt_umengpush_common: ^lastest_version
+  flt_umengpush_utdid: ^lastest_version   #如果项目中有其他三方库引入了utdid，无需加入该插件
   flt_umengpush_core: ^lastest_version
 
 //import
@@ -20,6 +21,10 @@ dependencies:
     git:
       url: https://github.com/RandyWei/flt_umengpush.git
       path: flt_umengpush_core
+  flt_umengpush_utdid:    #如果项目中有其他三方库引入了utdid，无需加入该插件
+    git:
+      url: https://github.com/RandyWei/flt_umengpush.git
+      path: flt_umengpush_utdid
 ```
 
 ### Android
