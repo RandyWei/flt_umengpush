@@ -1,0 +1,33 @@
+PODS:
+  - flt_umengpush_core (0.0.1):
+    - Flutter
+    - UMCPush
+  - Flutter (1.0.0)
+  - UMCCommon (2.1.1)
+  - UMCPush (3.2.4):
+    - UMCCommon
+
+DEPENDENCIES:
+  - flt_umengpush_core (from `.symlinks/plugins/flt_umengpush_core/ios`)
+  - Flutter (from `.symlinks/flutter/ios`)
+
+SPEC REPOS:
+  trunk:
+    - UMCCommon
+    - UMCPush
+
+EXTERNAL SOURCES:
+  flt_umengpush_core:
+    :path: ".symlinks/plugins/flt_umengpush_core/ios"
+  Flutter:
+    :path: ".symlinks/flutter/ios"
+
+SPEC CHECKSUMS:
+  flt_umengpush_core: 98073faa64791a2ef23ee997a79bd217767a294e
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  UMCCommon: 971f324a5a99c9d662ae040a815e7e3d7ef8b2a8
+  UMCPush: 1edd856027dcf905333effb4040ace5d236a7316
+
+PODFILE CHECKSUM: 7fb83752f59ead6285236625b82473f90b1cb932
+
+COCOAPODS: 1.8.3
