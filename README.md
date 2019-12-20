@@ -1,7 +1,6 @@
 # flt_umengpush_common
 
-友盟推送common基础包
-
+友盟推送 common 基础包
 
 ## 安装方法
 
@@ -15,15 +14,18 @@ dependencies:
 dependencies:
   flt_umengpush_common:
     git:
-      url: git://github.com/RandyWei/flt_umengpush_common.git
+      url: https://github.com/RandyWei/flt_umengpush.git
+      path: flt_umengpush_common
   flt_umengpush_core:
     git:
-      url: git://github.com/RandyWei/flt_umengpush_core.git
+      url: https://github.com/RandyWei/flt_umengpush.git
+      path: flt_umengpush_core
 ```
 
 ### Android
 
-创建App类继承io.flutter.app.FlutterApplication
+创建 App 类继承 io.flutter.app.FlutterApplication
+
 ```
 class App: FlutterApplication() {
     override fun onCreate() {
@@ -36,7 +38,8 @@ class App: FlutterApplication() {
     }
 }
 ```
-然后在AndroidManifest.xml中使用该类,并配置权限
+
+然后在 AndroidManifest.xml 中使用该类,并配置权限
 
 ```xml
 <manifest
@@ -48,7 +51,7 @@ class App: FlutterApplication() {
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    
+
     <!-- 推荐的权限 -->
     <!-- 添加如下权限，以便使用更多的第三方SDK和更精准的统计数据 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -62,18 +65,19 @@ class App: FlutterApplication() {
 </manifest>
 
 ```
+
 ### iOS
-
-
 
 #### swift
 
-在 项目名-Bridgin-Header.h中导包
+在 项目名-Bridgin-Header.h 中导包
+
 ```
 #import "FltUmengpushCommonPlugin.h"
 ```
 
-在ApppDelegate中添加以下代码
+在 ApppDelegate 中添加以下代码
+
 ```
 @objc class AppDelegate: FlutterAppDelegate {
   override func application(
@@ -81,16 +85,17 @@ class App: FlutterApplication() {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
-    
+
     //初始化友盟推送
     FltUmengpushCommonPlugin.initWithAppKey("友盟推送AppKey", channel: "渠道")
-    
+
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 }
 ```
 
 #### oc
+
 ```
 #include "AppDelegate.h"
 #include "GeneratedPluginRegistrant.h"
@@ -104,16 +109,17 @@ class App: FlutterApplication() {
   // Override point for customization after application launch.
     //初始化友盟推送
     [FltUmengpushCommonPlugin initWithAppKey:@"友盟推送appKey" channel:@"渠道"];
-    
+
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 @end
 ```
 
-### dart代码
+### dart 代码
 
 在程序入口监听通知
+
 ```dart
   @override
   void initState() {
@@ -128,6 +134,3 @@ class App: FlutterApplication() {
       }
   }
 ```
-
-
-
