@@ -2,11 +2,11 @@ name: flt_umengpush_core
 description: A new Flutter plugin by umeng push core , base umeng push sdk
 version: 1.0.1
 author: Randy Wei<smile561607154@163.com>
-homepage: https://github.com/RandyWei/flt_umengpush_core
-repository: https://github.com/RandyWei/flt_umengpush_core
+homepage: https://github.com/RandyWei/flt_umengpush
+repository: https://github.com/RandyWei/flt_umengpush
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: '>=2.1.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -28,7 +28,6 @@ flutter:
   plugin:
     androidPackage: dev.bughub.plugin.flt_umengpush_core
     pluginClass: FltUmengpushCorePlugin
-
   # To add assets to your plugin package, add an assets section, like this:
   # assets:
   #  - images/a_dot_burr.jpeg
@@ -39,7 +38,6 @@ flutter:
   #
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
-
   # To add custom fonts to your plugin package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
   # "family" key with the font family name, and a "fonts" key with a
