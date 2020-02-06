@@ -20,22 +20,26 @@ class FltUmengpushCorePlugin(var registrar: Registrar) : MethodCallHandler {
 
 
     companion object {
+
+        @JvmField
+        var corePlugin: FltUmengpushCorePlugin? = null
+
         @JvmStatic
         fun registerWith(registrar: Registrar) {
 
-            val plugin = FltUmengpushCorePlugin(registrar)
+            corePlugin = FltUmengpushCorePlugin(registrar)
 
             val channel = MethodChannel(registrar.messenger(), "plugin.bughub.dev/flt_umengpush_core")
-            channel.setMethodCallHandler(plugin)
+            channel.setMethodCallHandler(corePlugin)
             val eventChannel = EventChannel(registrar.messenger(), "plugin.bughub.dev/flt_umengpush_core/event")
             eventChannel.setStreamHandler(object : EventChannel.StreamHandler {
                 override fun onListen(p0: Any?, sink: EventChannel.EventSink?) {
                     // 把eventSink存起来
-                    plugin.eventSink.setDelegate(sink)
+                    corePlugin?.eventSink?.setDelegate(sink)
                 }
 
                 override fun onCancel(p0: Any?) {
-                    plugin.eventSink.setDelegate(null)
+                    corePlugin?.eventSink?.setDelegate(null)
                 }
 
             })
@@ -72,7 +76,8 @@ class FltUmengpushCorePlugin(var registrar: Registrar) : MethodCallHandler {
                 val eventResult = HashMap<String, Any>()
                 eventResult["event"] = "notificationHandler"
                 eventResult["data"] = uMessage.custom
-                eventSink.success(eventResult)
+
+                corePlugin?.eventSink?.success(eventResult)
             }
 
         }
