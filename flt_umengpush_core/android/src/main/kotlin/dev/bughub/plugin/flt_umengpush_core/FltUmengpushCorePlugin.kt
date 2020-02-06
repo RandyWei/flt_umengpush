@@ -66,6 +66,16 @@ class FltUmengpushCorePlugin(var registrar: Registrar) : MethodCallHandler {
 
             })
 
+            //自定义通知栏打开动作
+            pushAgent.setNotificationClickHandler { _, uMessage ->
+
+                val eventResult = HashMap<String, Any>()
+                eventResult["event"] = "notificationHandler"
+                eventResult["data"] = uMessage.custom
+
+                plugin.eventSink.success(eventResult)
+            }
+
         }
     }
 
@@ -87,14 +97,14 @@ class FltUmengpushCorePlugin(var registrar: Registrar) : MethodCallHandler {
                 }
 
                 //自定义通知栏打开动作
-                pushAgent?.setNotificationClickHandler { _, uMessage ->
+                //pushAgent?.setNotificationClickHandler { _, uMessage ->
 
-                    val eventResult = HashMap<String, Any>()
-                    eventResult["event"] = "notificationHandler"
-                    eventResult["data"] = uMessage.custom
+                //    val eventResult = HashMap<String, Any>()
+                //    eventResult["event"] = "notificationHandler"
+                //    eventResult["data"] = uMessage.custom
 
-                    eventSink.success(eventResult)
-                }
+                //    eventSink.success(eventResult)
+                //}
 
                 result.success(null)
             }
