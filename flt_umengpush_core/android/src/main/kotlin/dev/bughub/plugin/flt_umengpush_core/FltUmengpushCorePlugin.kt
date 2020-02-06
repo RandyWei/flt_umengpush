@@ -72,8 +72,7 @@ class FltUmengpushCorePlugin(var registrar: Registrar) : MethodCallHandler {
                 val eventResult = HashMap<String, Any>()
                 eventResult["event"] = "notificationHandler"
                 eventResult["data"] = uMessage.custom
-
-                plugin.eventSink.success(eventResult)
+                eventSink.success(eventResult)
             }
 
         }
