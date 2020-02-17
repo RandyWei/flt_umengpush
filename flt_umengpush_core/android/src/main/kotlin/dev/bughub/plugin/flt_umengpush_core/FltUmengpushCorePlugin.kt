@@ -89,7 +89,7 @@ class FltUmengpushCorePlugin(var registrar: Registrar) : MethodCallHandler {
             call.method == "configure" -> {
 
                 if (pushAgent==null||deviceToken==null){
-                    eventSink.error("error","配置可能有错，请检查.","")
+                    eventSink.error("error","配置可能有错，请检查.($error)","")
                 }
 
                 deviceToken?.let {
