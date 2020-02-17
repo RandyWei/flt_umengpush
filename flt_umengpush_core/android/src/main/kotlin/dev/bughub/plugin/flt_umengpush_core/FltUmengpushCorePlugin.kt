@@ -62,10 +62,12 @@ class FltUmengpushCorePlugin(var registrar: Registrar) : MethodCallHandler {
             pushAgent.register(object : IUmengRegisterCallback {
                 override fun onSuccess(deviceToken: String?) {
                     FltUmengpushCorePlugin.deviceToken = deviceToken
+                    Log.i("==========","deviceToken:$deviceToken");
                 }
 
                 override fun onFailure(p0: String?, p1: String?) {
                     error = p0 + p1
+                    Log.i("==========","error:$error");
                 }
 
             })
