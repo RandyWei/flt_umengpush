@@ -4,6 +4,7 @@ import android.content.Context
 import android.text.TextUtils
 import android.util.Log
 import com.umeng.commonsdk.UMConfigure
+import com.umeng.commonsdk.debug.UMLog
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -29,7 +30,7 @@ class FltUmengpushCommonPlugin(var registrar: Registrar): MethodCallHandler {
         Log.e("UmengpushCommonPlugin","appKey is null")
         return
       }
-
+      UMConfigure.setLogEnabled(true)
       UMConfigure.init(context, appKey, channel, deviceType, secret)
     }
   }
