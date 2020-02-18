@@ -37,6 +37,7 @@ class FltUmengpushCommonPlugin(var registrar: Registrar): MethodCallHandler {
       Log.i("UmengpushCommonPlugin","=================1")
       try {
         val var24 = Class.forName("com.umeng.message.MessageSharedPrefs")
+        var24.methods.forEach { Log.i("UmengpushCommonPlugin", it.name) }
         Log.i("UmengpushCommonPlugin","=================2")
         val var25 = var24.getDeclaredMethod("getInstance", Context::class.java)
         Log.i("UmengpushCommonPlugin","=================3")
