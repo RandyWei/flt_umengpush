@@ -4,13 +4,11 @@ import android.content.Context
 import android.text.TextUtils
 import android.util.Log
 import com.umeng.commonsdk.UMConfigure
-import com.umeng.commonsdk.debug.UMLog
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import java.lang.reflect.Method
 
 class FltUmengpushCommonPlugin(var registrar: Registrar): MethodCallHandler {
   companion object {
@@ -33,26 +31,6 @@ class FltUmengpushCommonPlugin(var registrar: Registrar): MethodCallHandler {
       }
       UMConfigure.setLogEnabled(true)
       UMConfigure.init(context, appKey, channel, deviceType, secret)
-
-      Log.i("UmengpushCommonPlugin","=================1")
-      try {
-        val var24 = Class.forName("com.umeng.message.MessageSharedPrefs")
-        var24.methods.forEach { Log.i("UmengpushCommonPlugin", it.name) }
-        Log.i("UmengpushCommonPlugin","=================2")
-        val var25 = var24.getDeclaredMethod("getInstance", Context::class.java)
-        Log.i("UmengpushCommonPlugin","=================3")
-        val var26: Any = var25.invoke(var24, context)
-        Log.i("UmengpushCommonPlugin","=================4")
-        val var9 = var24.getDeclaredMethod("setMessageAppKey", String::class.java)
-        Log.i("UmengpushCommonPlugin","=================5")
-        var9.isAccessible = true
-        var9.invoke(var26, appKey)
-        Log.i("UmengpushCommonPlugin","=================6")
-      } catch (var20: Exception) {
-        Log.i("UmengpushCommonPlugin","=================7")
-        var20.printStackTrace()
-      }
-      Log.i("UmengpushCommonPlugin","=================8")
     }
   }
 
