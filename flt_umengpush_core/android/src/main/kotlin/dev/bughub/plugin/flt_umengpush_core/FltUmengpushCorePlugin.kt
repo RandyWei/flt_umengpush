@@ -59,16 +59,17 @@ class FltUmengpushCorePlugin(var registrar: Registrar) : MethodCallHandler {
             //获取消息推送代理
             val pushAgent = PushAgent.getInstance(context)
             FltUmengpushCorePlugin.pushAgent = pushAgent
-            Log.i("==========","pushAgent:$pushAgent");
+            Log.i("==========","pushAgent:$pushAgent")
+
             pushAgent.register(object : IUmengRegisterCallback {
                 override fun onSuccess(deviceToken: String?) {
                     FltUmengpushCorePlugin.deviceToken = deviceToken
-                    Log.i("==========","deviceToken:$deviceToken");
+                    Log.i("==========","deviceToken:$deviceToken")
                 }
 
                 override fun onFailure(p0: String?, p1: String?) {
                     error = p0 + p1
-                    Log.i("==========","error:$error");
+                    Log.i("==========","error:$error")
                 }
 
             })
