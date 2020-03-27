@@ -153,6 +153,17 @@
 }
 
 - (NSString *)stringDevicetoken:(NSData *)deviceToken {
+    
+    if (@available(iOS 13.0, *)) {
+        if (![deviceToken isKindOfClass:[NSData class]]) return @"";
+        const unsigned *tokenBytes = (const unsigned *)[deviceToken bytes];
+        NSString *hexToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                              ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                              ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                              ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+        return hexToken;
+    }
+    
     NSString *token = [deviceToken description];
     NSString *pushToken = [[[token stringByReplacingOccurrencesOfString:@"<" withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
 //    NSLog(@"umeng_push_plugin token: %@", pushToken);
