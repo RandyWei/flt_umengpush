@@ -15,8 +15,8 @@ class FltUmengpushCommon {
   /*
    * 初始化方法
    */
-  static Future<Void> init(String appKey, String secret,
-      [String channel, int deviceType]) async {
+  static Future<Void?> init(String appKey, String secret,
+      [String? channel, int? deviceType]) async {
     return await _channel.invokeMethod('init', {
       "appKey": appKey,
       "secret": secret,
@@ -28,7 +28,7 @@ class FltUmengpushCommon {
   /*
   * 是否开启日志
   */
-  static Future<Void> setLogEnabled(bool enabled) async {
+  static Future<Void?> setLogEnabled(bool enabled) async {
     return await _channel.invokeMethod('setLogEnabled', {"enabled": enabled});
   }
 }
